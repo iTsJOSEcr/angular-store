@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 import { Product } from '../../models/product.model';
 
 @Component({
   selector: 'app-product-card',
-  imports: [],
+  imports: [DecimalPipe],
   templateUrl: './product-card.html',
   styleUrl: './product-card.css',
 })
@@ -14,7 +15,7 @@ export class ProductCard {
     description: 'Laptop para trabajo y estudio',
     price: 450000,
     stock: 10,
-    imageUrl: 'https://via.placeholder.com/300',
+    imageUrl: '/images/products/laptop-asus.jpg',
     active: true
   };
 }

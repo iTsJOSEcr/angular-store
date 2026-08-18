@@ -1,5 +1,10 @@
-<h2>{{ product.name }}</h2>
-<p>{{ product.description }}</p>
-<p>Precio: {{ product.price }}</p>
-<p>Stock: {{ product.stock }}</p>
+<div class="product-card">
+    <img [src]="product.imageUrl" [alt]="product.name">
 
+    <h2>{{ product.name }}</h2>
+    <p>{{ product.description }}</p>
+   <p class="price">₡{{ product.price | number }}</p>
+    <p>Stock: {{ product.stock }}</p>
+
+    <button>Agregar al carrito</button>
+</div>
