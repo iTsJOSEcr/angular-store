@@ -1,3 +1,13 @@
 <h1>Mi tienda</h1>
 
-<app-product-card></app-product-card>
+<p>🛒 Carrito: {{ getTotalItems() }} productos</p>
+
+<div class="products-grid">
+ @for (product of products; track product.id) {
+  <app-product-card
+    [product]="product"
+    (addToCart)="handleAddToCart($event)">
+  </app-product-card>
+}
+</div>
+
