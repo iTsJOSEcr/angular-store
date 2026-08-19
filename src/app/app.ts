@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import { ProductCard } from './components/product-card/product-card';
+import { ProductCard,  } from './components/product-card/product-card';
 import { Product } from './models/product.model';
 import { CartItem } from './models/cart-item.model';
+import { DecimalPipe } from '@angular/common';
+
 
 @Component({
   selector: 'app-root',
-  imports: [ProductCard],
+  imports: [ProductCard, DecimalPipe],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -59,6 +61,29 @@ getTotalItems(): number {
   );
 }
 
+increaseQuantity(item: CartItem): void {
+  item.quantity++;
+}
+
+decreaseQuantity(item: CartItem): void {
+  if (item.quantity > 1) {
+    item.quantity--;
+  }
+}
+
+
+removeFromCart(item: CartItem): void {
+  this.cart = this.cart.filter(
+    cartItem => cartItem.product.id !== item.product.id
+  );
+}
+
+getCartTotal(): number {
+  return this.cart.reduce(
+    (total, item) => total + item.product.price * item.quantity,
+    0
+  );
+}
 
 }
 

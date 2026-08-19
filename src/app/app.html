@@ -2,12 +2,33 @@
 
 <p>🛒 Carrito: {{ getTotalItems() }} productos</p>
 
-<div class="products-grid">
- @for (product of products; track product.id) {
-  <app-product-card
-    [product]="product"
-    (addToCart)="handleAddToCart($event)">
-  </app-product-card>
-}
+<div class="cart">
+  <h2>Carrito</h2>
+
+  @for (item of cart; track item.product.id) {
+
+    <div class="cart-item">
+      <span>{{ item.product.name }}</span>
+
+      <div>
+        <button (click)="decreaseQuantity(item)">-</button>
+        <span>x{{ item.quantity }}</span>
+        <button (click)="increaseQuantity(item)">+</button>
+        <button (click)="removeFromCart(item)">Eliminar</button>
+      </div>
+    </div>
+  }
+
+  <p class="cart-total">
+    Total: ₡{{ getCartTotal() | number }}
+  </p>
 </div>
 
+<div class="products-grid">
+  @for (product of products; track product.id) {
+    <app-product-card
+      [product]="product"
+      (addToCart)="handleAddToCart($event)">
+    </app-product-card>
+  }
+</div>
