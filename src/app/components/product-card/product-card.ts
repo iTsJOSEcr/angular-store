@@ -12,6 +12,7 @@ import { Product } from '../../models/product.model';
 
 export class ProductCard {
     product = input.required<Product>();
-    
+
     addToCart = output<Product>();
+    quantityInCart = input<number>(0);
 }

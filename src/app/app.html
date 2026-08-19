@@ -13,7 +13,11 @@
       <div>
         <button (click)="decreaseQuantity(item)">-</button>
         <span>x{{ item.quantity }}</span>
-        <button (click)="increaseQuantity(item)">+</button>
+        <button
+  (click)="increaseQuantity(item)"
+  [disabled]="item.quantity >= item.product.stock">
+  +
+</button>
         <button (click)="removeFromCart(item)">Eliminar</button>
       </div>
     </div>
@@ -28,6 +32,7 @@
   @for (product of products; track product.id) {
     <app-product-card
       [product]="product"
+      [quantityInCart]="getQuantityInCart(product)"
       (addToCart)="handleAddToCart($event)">
     </app-product-card>
   }

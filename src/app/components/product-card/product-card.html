@@ -6,7 +6,15 @@
     <p class="price">₡{{ product().price | number }}</p>
     <p>Stock: {{ product().stock }}</p>
 
-   <button (click)="addToCart.emit(product())">
-  Agregar al carrito
+  <button
+  (click)="addToCart.emit(product())"
+  [disabled]="quantityInCart() >= product().stock">
+
+  @if (quantityInCart() >= product().stock) {
+    Stock máximo alcanzado
+  } @else {
+    Agregar al carrito
+  }
+
 </button>
 </div>

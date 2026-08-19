@@ -43,17 +43,20 @@ export class App {
   );
 
   if (existingItem) {
-    existingItem.quantity++;
+    if (existingItem.quantity < product.stock) {
+      existingItem.quantity++;
+    }
   } else {
-    this.cart.push({
-      product,
-      quantity: 1
-    });
+    if (product.stock > 0) {
+      this.cart.push({
+        product,
+        quantity: 1
+      });
+    }
   }
 
   console.log(this.cart);
 }
-
 getTotalItems(): number {
   return this.cart.reduce(
     (total, item) => total + item.quantity,
@@ -61,8 +64,19 @@ getTotalItems(): number {
   );
 }
 
+
+getQuantityInCart(product: Product): number {
+  const item = this.cart.find(
+    item => item.product.id === product.id
+  );
+
+  return item?.quantity ?? 0;
+}
+
 increaseQuantity(item: CartItem): void {
-  item.quantity++;
+  if (item.quantity < item.product.stock) {
+    item.quantity++;
+  }
 }
 
 decreaseQuantity(item: CartItem): void {
