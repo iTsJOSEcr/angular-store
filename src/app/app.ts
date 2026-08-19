@@ -91,6 +91,9 @@ removeFromCart(item: CartItem): void {
     cartItem => cartItem.product.id !== item.product.id
   );
 }
+clearCart(): void {
+  this.cart = [];
+}
 
 getCartTotal(): number {
   return this.cart.reduce(
