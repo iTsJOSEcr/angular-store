@@ -1,10 +1,11 @@
 import { Component, input, output } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { Product } from '../../models/product.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-product-card',
-  imports: [DecimalPipe],
+ imports: [DecimalPipe, RouterLink],
   templateUrl: './product-card.html',
   styleUrl: './product-card.css',
 })

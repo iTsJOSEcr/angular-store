@@ -1,0 +1,29 @@
+.store-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.store-header h1 {
+  margin: 0;
+}
+
+.cart-link {
+  text-decoration: none;
+  background-color: #222;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+}
+
+.cart-link:hover {
+  background-color: #444;
+}
+
+.products-grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+

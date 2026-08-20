@@ -1,0 +1,43 @@
+<a routerLink="/" class="back-link">
+  ← Volver a la tienda
+</a>
+
+@if (product) {
+
+  <div class="product-detail">
+
+    <div class="product-image">
+      <img
+        [src]="product.imageUrl"
+        [alt]="product.name">
+    </div>
+
+    <div class="product-info">
+      <h1>{{ product.name }}</h1>
+
+      <p>{{ product.description }}</p>
+
+      <h2>₡{{ product.price | number }}</h2>
+
+      <p>Stock disponible: {{ product.stock }}</p>
+
+     <button
+  (click)="addToCart()"
+  [disabled]="product && getQuantityInCart() >= product.stock">
+
+  @if (product && getQuantityInCart() >= product.stock) {
+    Stock máximo alcanzado
+  } @else {
+    Agregar al carrito
+  }
+
+</button>
+    </div>
+
+  </div>
+
+} @else {
+
+  <p>Producto no encontrado.</p>
+
+}
