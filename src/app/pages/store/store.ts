@@ -1,5 +1,5 @@
 import { Component, inject, signal, computed } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { ProductCard } from '../../components/product-card/product-card';
 import { Product } from '../../models/product.model';
 import { Cart as CartService } from '../../services/cart';
@@ -151,4 +151,22 @@ export class Store {
   getQuantityInCart(product: Product): number {
     return this.cartService.getQuantityInCart(product);
   }
+
+
+
+  router = inject(Router);
+
+purchaseSuccess = signal(
+  history.state.purchaseSuccess === true
+);
+
+constructor() {
+  if (this.purchaseSuccess()) {
+    setTimeout(() => {
+      this.purchaseSuccess.set(false);
+    }, 3000);
+  }
+}
+
+
 }

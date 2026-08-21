@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Product as ProductModel } from '../models/product.model';
 
+
 @Injectable({
   providedIn: 'root',
 })
 export class Product {
 
-  products: ProductModel[] = [
+  private defaultProducts: ProductModel[] = [
   {
     id: 1,
     name: 'Laptop ASUS',
@@ -159,6 +160,18 @@ export class Product {
   }
 ];
 
+products: ProductModel[] = this.loadProducts();
+
+private loadProducts(): ProductModel[] {
+  const savedProducts = localStorage.getItem('products');
+
+  if (!savedProducts) {
+    return this.defaultProducts;
+  }
+
+  return JSON.parse(savedProducts);
+}
+
   getProducts(): ProductModel[] {
     return this.products;
   }
@@ -168,4 +181,24 @@ export class Product {
       product => product.id === id
     );
   }
+
+
+  updateStock(productId: number, quantity: number): void {
+  const product = this.products.find(
+    product => product.id === productId
+  );
+
+  if (!product) {
+    return;
+  }
+
+  product.stock -= quantity;
+
+  localStorage.setItem(
+    'products',
+    JSON.stringify(this.products)
+  );
+}
+
+
 }

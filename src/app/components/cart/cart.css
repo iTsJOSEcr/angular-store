@@ -130,3 +130,43 @@
   background-color: #222;
   color: white;
 }
+
+
+
+.cart-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.clear-button,
+.checkout-button {
+  padding: 11px 18px;
+  border: none;
+  border-radius: 8px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.clear-button {
+  background-color: #eeeeee;
+  color: #333;
+}
+
+.clear-button:hover {
+  background-color: #dddddd;
+}
+
+.checkout-button {
+  background-color: #222;
+  color: white;
+  text-decoration: none;
+}
+
+.checkout-button:hover {
+  background-color: #444;
+}
+

@@ -51,15 +51,29 @@
       }
     </div>
 
-    <div class="cart-summary">
-      <h2>Total: ₡{{ getCartTotal() | number }}</h2>
+    <div class="cart-total">
 
-      <button
-        class="clear-cart"
-        (click)="clearCart()">
-        Vaciar carrito
-      </button>
-    </div>
+  <h2>
+    Total: ₡{{ getCartTotal() | number }}
+  </h2>
+
+  <div class="cart-actions">
+
+    <button
+      class="clear-button"
+      (click)="clearCart()">
+      Vaciar carrito
+    </button>
+
+    <a
+      routerLink="/checkout"
+      class="checkout-button">
+      Finalizar compra
+    </a>
+
+  </div>
+
+</div>
 
   </div>
 
