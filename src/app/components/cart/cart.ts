@@ -15,7 +15,7 @@ export class Cart {
   cartService = inject(CartService);
 
   get cart(): CartItem[] {
-    return this.cartService.cart;
+    return this.cartService.cart();
   }
 
   increaseQuantity(item: CartItem): void {

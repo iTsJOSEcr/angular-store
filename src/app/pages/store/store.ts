@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ProductCard } from '../../components/product-card/product-card';
 import { Product } from '../../models/product.model';
@@ -17,6 +17,7 @@ export class Store {
   productService = inject(ProductService);
 
   products = this.productService.getProducts();
+  searchTerm = signal('');
 
   handleAddToCart(product: Product): void {
     this.cartService.addProduct(product);
@@ -29,4 +30,20 @@ export class Store {
   getQuantityInCart(product: Product): number {
     return this.cartService.getQuantityInCart(product);
   }
+
+
+  filteredProducts = computed(() => {
+  const term = this.searchTerm().toLowerCase().trim();
+
+  if (!term) {
+    return this.products;
+  }
+
+  return this.products.filter(product =>
+    product.name.toLowerCase().includes(term) ||
+    product.description.toLowerCase().includes(term)
+  );
+});
+
+
 }

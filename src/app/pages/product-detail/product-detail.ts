@@ -1,19 +1,21 @@
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { DecimalPipe } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { DecimalPipe, Location } from '@angular/common';
 import { Product } from '../../models/product.model';
 import { Cart as CartService } from '../../services/cart';
 import { Product as ProductService } from '../../services/product';
 
 @Component({
   selector: 'app-product-detail',
-  imports: [RouterLink, DecimalPipe],
+  imports: [DecimalPipe],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css',
 })
 export class ProductDetail {
 
   route = inject(ActivatedRoute);
+  location = inject(Location);
+
   cartService = inject(CartService);
   productService = inject(ProductService);
 
@@ -37,5 +39,17 @@ export class ProductDetail {
     }
 
     return this.cartService.getQuantityInCart(this.product);
+  }
+
+  getAvailableStock(): number {
+    if (!this.product) {
+      return 0;
+    }
+
+    return this.cartService.getAvailableStock(this.product);
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 }

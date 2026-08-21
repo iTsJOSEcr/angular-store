@@ -1,6 +1,8 @@
-<a routerLink="/" class="back-link">
+<button
+  class="back-link"
+  (click)="goBack()">
   ← Volver a la tienda
-</a>
+</button>
 
 @if (product) {
 
@@ -19,19 +21,22 @@
 
       <h2>₡{{ product.price | number }}</h2>
 
-      <p>Stock disponible: {{ product.stock }}</p>
+      <p>
+        Stock disponible: {{ getAvailableStock() }}
+      </p>
 
-     <button
-  (click)="addToCart()"
-  [disabled]="product && getQuantityInCart() >= product.stock">
+      <button
+        (click)="addToCart()"
+        [disabled]="getAvailableStock() === 0">
 
-  @if (product && getQuantityInCart() >= product.stock) {
-    Stock máximo alcanzado
-  } @else {
-    Agregar al carrito
-  }
+        @if (getAvailableStock() === 0) {
+          Stock máximo alcanzado
+        } @else {
+          Agregar al carrito
+        }
 
-</button>
+      </button>
+
     </div>
 
   </div>
