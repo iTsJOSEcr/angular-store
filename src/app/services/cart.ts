@@ -1,4 +1,4 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, effect } from '@angular/core';
 import { CartItem } from '../models/cart-item.model';
 import { Product } from '../models/product.model';
 
@@ -7,7 +7,7 @@ import { Product } from '../models/product.model';
 })
 export class Cart {
 
-  cart = signal<CartItem[]>([]);
+  cart = signal<CartItem[]>(this.loadCart());
 
   totalItems = computed(() =>
     this.cart().reduce(
@@ -95,6 +95,27 @@ export class Cart {
   const quantityInCart = this.getQuantityInCart(product);
 
   return product.stock - quantityInCart;
+}
+
+
+constructor() {
+  effect(() => {
+    localStorage.setItem(
+      'cart',
+      JSON.stringify(this.cart())
+    );
+  });
+}
+
+
+private loadCart(): CartItem[] {
+  const savedCart = localStorage.getItem('cart');
+
+  if (!savedCart) {
+    return [];
+  }
+
+  return JSON.parse(savedCart);
 }
 
 
