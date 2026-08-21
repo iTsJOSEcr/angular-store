@@ -66,6 +66,27 @@
 
 </div>
 
+<div class="sort-filter">
+
+  <label for="sort">
+    Ordenar:
+  </label>
+
+  <select
+    id="sort"
+    [value]="selectedSort()"
+    (change)="selectedSort.set($any($event.target).value)">
+
+    @for (option of sortOptions; track option.value) {
+      <option [value]="option.value">
+        {{ option.label }}
+      </option>
+    }
+
+  </select>
+
+</div>
+
 
 @if (filteredProducts().length > 0) {
 

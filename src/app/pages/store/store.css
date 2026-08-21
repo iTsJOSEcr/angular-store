@@ -237,3 +237,43 @@
   box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
 }
 
+
+
+/* =========================
+   ORDENAMIENTO
+========================= */
+
+.sort-filter {
+  max-width: 1100px;
+  margin: 0 auto 28px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sort-filter label {
+  font-weight: 600;
+  color: #333;
+}
+
+.sort-filter select {
+  padding: 9px 14px;
+
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+
+  background-color: white;
+  color: #333;
+
+  font-size: 14px;
+
+  cursor: pointer;
+  outline: none;
+}
+
+.sort-filter select:focus {
+  border-color: #222;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
+}
+
