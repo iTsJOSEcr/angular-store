@@ -3,6 +3,7 @@ import { Store } from './pages/store/store';
 import { Cart } from './components/cart/cart';
 import { ProductDetail } from './pages/product-detail/product-detail';
 import { Checkout } from './pages/checkout/checkout';
+import { Orders } from './pages/orders/orders';
 
 export const routes: Routes = [
   {
@@ -20,6 +21,10 @@ export const routes: Routes = [
   {
     path: 'checkout',
     component: Checkout
+  },
+  {
+    path: 'orders',
+    component: Orders
   },
   {
     path: '**',

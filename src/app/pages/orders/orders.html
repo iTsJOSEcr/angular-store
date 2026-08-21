@@ -1,0 +1,78 @@
+<a routerLink="/" class="back-link">
+  ← Volver a la tienda
+</a>
+
+<div class="orders-page">
+
+  <h1>Mis pedidos</h1>
+
+  @if (orders().length > 0) {
+
+    <div class="orders-list">
+
+      @for (order of orders(); track order.id) {
+
+        <div class="order-card">
+
+          <div class="order-header">
+            <div>
+              <h2>Pedido #{{ order.id }}</h2>
+              <p>{{ order.date }}</p>
+            </div>
+
+            <strong>
+              ₡{{ order.total | number }}
+            </strong>
+          </div>
+
+          <div class="customer-info">
+            <p>
+              <strong>Cliente:</strong>
+              {{ order.customerName }}
+            </p>
+
+            <p>
+              <strong>Correo:</strong>
+              {{ order.customerEmail }}
+            </p>
+
+            <p>
+              <strong>Dirección:</strong>
+              {{ order.address }}
+            </p>
+          </div>
+
+          <div class="order-items">
+
+            @for (item of order.items; track item.product.id) {
+
+              <div class="order-item">
+                <span>
+                  {{ item.product.name }} x{{ item.quantity }}
+                </span>
+
+                <span>
+                  ₡{{ item.product.price * item.quantity | number }}
+                </span>
+              </div>
+
+            }
+
+          </div>
+
+        </div>
+
+      }
+
+    </div>
+
+  } @else {
+
+    <div class="empty-orders">
+      📦 Aún no tienes pedidos.
+    </div>
+
+  }
+
+</div>
+

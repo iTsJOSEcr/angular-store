@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Cart as CartService } from '../../services/cart';
 import { Product as ProductService } from '../../services/product';
+import { Order as OrderService } from '../../services/order';
 
 
 @Component({
@@ -17,6 +18,7 @@ export class Checkout {
   cartService = inject(CartService);
   productService = inject(ProductService);
   router = inject(Router);
+  orderService = inject(OrderService);
 
   
 
@@ -39,6 +41,19 @@ export class Checkout {
     this.checkoutForm.markAllAsTouched();
     return;
   }
+
+  const order = {
+  id: this.orderService.getNextId(),
+  customerName: this.checkoutForm.value.name!,
+  customerEmail: this.checkoutForm.value.email!,
+  address: this.checkoutForm.value.address!,
+  items: [...this.cartService.cart()],
+  total: this.cartService.cartTotal(),
+  date: new Date().toLocaleString()
+};
+
+this.orderService.addOrder(order);
+
 
   this.cartService.cart().forEach(item => {
     this.productService.updateStock(

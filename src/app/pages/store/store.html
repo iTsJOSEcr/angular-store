@@ -1,9 +1,17 @@
 <header class="store-header">
   <h1>Mi tienda</h1>
 
+ <div class="header-actions">
+
+  <a routerLink="/orders" class="orders-link">
+    📦 Mis pedidos
+  </a>
+
   <a routerLink="/cart" class="cart-link">
     🛒 Carrito: {{ getTotalItems() }}
   </a>
+
+</div>
 </header>
 
 @if (purchaseSuccess()) {
