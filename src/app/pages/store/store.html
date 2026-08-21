@@ -9,7 +9,6 @@
 <div class="search-container">
 
   <div class="search-box">
-
     <input
       type="text"
       placeholder="Buscar productos..."
@@ -24,16 +23,54 @@
         ✕
       </button>
     }
-
   </div>
 
 </div>
 
+<div class="category-filters">
+
+  @for (category of categories; track category) {
+
+    <button
+      type="button"
+      (click)="selectedCategory.set(category)"
+      [class.active]="selectedCategory() === category">
+
+      {{ category }}
+
+    </button>
+
+  }
+
+</div>
+
+
+<div class="price-filter">
+
+  <label for="price">
+    Precio:
+  </label>
+
+  <select
+    id="price"
+    [value]="selectedPrice()"
+    (change)="selectedPrice.set($any($event.target).value)">
+
+    @for (price of priceRanges; track price) {
+      <option [value]="price">
+        {{ price }}
+      </option>
+    }
+
+  </select>
+
+</div>
 
 
 @if (filteredProducts().length > 0) {
 
   <div class="products-grid">
+
     @for (product of filteredProducts(); track product.id) {
 
       <app-product-card
@@ -43,6 +80,7 @@
       </app-product-card>
 
     }
+
   </div>
 
 } @else {

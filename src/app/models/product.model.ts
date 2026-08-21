@@ -6,6 +6,7 @@ export interface Product {
     stock:number;
     imageUrl:string;
     active:boolean;
+    category: string;
 }
 
 

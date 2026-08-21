@@ -18,6 +18,30 @@ export class Store {
 
   products = this.productService.getProducts();
   searchTerm = signal('');
+  selectedCategory = signal('Todos');
+
+categories = [
+  'Todos',
+  'Computadoras',
+  'Periféricos',
+  'Monitores',
+  'Audio',
+  'Componentes',
+  'Accesorios',
+  'Redes',
+  'Muebles'
+];
+
+selectedPrice = signal('Todos');
+
+priceRanges = [
+  'Todos',
+  'Menos de ₡30,000',
+  '₡30,000 - ₡60,000',
+  '₡60,000 - ₡150,000',
+  'Más de ₡150,000'
+];
+
 
   handleAddToCart(product: Product): void {
     this.cartService.addProduct(product);
@@ -32,17 +56,48 @@ export class Store {
   }
 
 
-  filteredProducts = computed(() => {
+
+ filteredProducts = computed(() => {
   const term = this.searchTerm().toLowerCase().trim();
+  const category = this.selectedCategory();
+  const price = this.selectedPrice();
 
-  if (!term) {
-    return this.products;
-  }
+  return this.products.filter(product => {
 
-  return this.products.filter(product =>
-    product.name.toLowerCase().includes(term) ||
-    product.description.toLowerCase().includes(term)
-  );
+    const matchesSearch =
+      product.name.toLowerCase().includes(term) ||
+      product.description.toLowerCase().includes(term);
+
+    const matchesCategory =
+      category === 'Todos' ||
+      product.category === category;
+
+    let matchesPrice = true;
+
+    if (price === 'Menos de ₡30,000') {
+      matchesPrice = product.price < 30000;
+    }
+
+    if (price === '₡30,000 - ₡60,000') {
+      matchesPrice =
+        product.price >= 30000 &&
+        product.price <= 60000;
+    }
+
+    if (price === '₡60,000 - ₡150,000') {
+      matchesPrice =
+        product.price > 60000 &&
+        product.price <= 150000;
+    }
+
+    if (price === 'Más de ₡150,000') {
+      matchesPrice = product.price > 150000;
+    }
+
+    return matchesSearch &&
+           matchesCategory &&
+           matchesPrice;
+  });
 });
 
 
