@@ -1,0 +1,91 @@
+<a routerLink="/" class="back-link">
+  ← Volver a la tienda
+</a>
+
+@if (cart.length > 0) {
+
+  <div class="cart-page">
+    <h1>Mi carrito</h1>
+
+    <div class="cart-list">
+      @for (item of cart; track item.product.id) {
+
+        <div class="cart-item">
+
+          <div class="cart-info">
+            <strong>{{ item.product.name }}</strong>
+
+            <p>
+              ₡{{ item.product.price | number }} c/u
+            </p>
+
+            <p class="item-subtotal">
+              Subtotal: ₡{{ item.product.price * item.quantity | number }}
+            </p>
+          </div>
+
+          <div class="cart-actions">
+
+            <button (click)="decreaseQuantity(item)">
+              -
+            </button>
+
+            <span>{{ item.quantity }}</span>
+
+            <button
+              (click)="increaseQuantity(item)"
+              [disabled]="item.quantity >= item.product.stock">
+              +
+            </button>
+
+            <button
+              class="remove-button"
+              (click)="removeFromCart(item)">
+              Eliminar
+            </button>
+
+          </div>
+
+        </div>
+
+      }
+    </div>
+
+    <div class="cart-total">
+
+  <h2>
+    Total: ₡{{ getCartTotal() | number }}
+  </h2>
+
+  <div class="cart-actions">
+
+    <button
+      class="clear-button"
+      (click)="clearCart()">
+      Vaciar carrito
+    </button>
+
+    <a
+      routerLink="/checkout"
+      class="checkout-button">
+      Finalizar compra
+    </a>
+
+  </div>
+
+</div>
+
+  </div>
+
+} @else {
+
+  <div class="empty-cart">
+    <h2>🛒 Tu carrito está vacío</h2>
+    <p>Agrega algunos productos para verlos aquí.</p>
+
+    <a routerLink="/" class="shop-link">
+      Ver productos
+    </a>
+  </div>
+
+}

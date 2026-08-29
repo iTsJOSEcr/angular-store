@@ -1,0 +1,326 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  padding: 32px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.store-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  max-width: 1100px;
+  margin: 0 auto 32px;
+
+  padding: 20px 24px;
+
+  background-color: white;
+  border-radius: 16px;
+
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.store-header h1 {
+  margin: 0;
+}
+
+
+/* =========================
+   CARRITO
+========================= */
+
+.cart-link {
+  text-decoration: none;
+
+  background-color: #222;
+  color: white;
+
+  padding: 10px 16px;
+  border-radius: 8px;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.cart-link:hover {
+  background-color: #444;
+  transform: translateY(-1px);
+}
+
+
+/* =========================
+   BUSCADOR
+========================= */
+
+.search-container {
+  max-width: 1100px;
+  margin: 0 auto 24px;
+}
+
+.search-box {
+  position: relative;
+
+  width: 100%;
+  max-width: 420px;
+}
+
+.search-box input {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 12px 42px 12px 16px;
+
+  border: 1px solid #dcdcdc;
+  border-radius: 10px;
+
+  font-size: 15px;
+
+  background-color: white;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.search-box input:focus {
+  border-color: #222;
+
+  box-shadow:
+    0 0 0 3px rgba(0, 0, 0, 0.08);
+}
+
+
+/* X DEL BUSCADOR */
+
+.clear-search {
+  position: absolute;
+
+  right: 10px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  border: none;
+  background: transparent;
+
+  color: #777;
+  font-size: 16px;
+
+  cursor: pointer;
+
+  padding: 5px;
+}
+
+.clear-search:hover {
+  color: #222;
+}
+
+
+/* =========================
+   PRODUCTOS
+========================= */
+
+.products-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 24px;
+}
+
+
+/* =========================
+   SIN RESULTADOS
+========================= */
+
+.no-results {
+  max-width: 1100px;
+  margin: 20px auto;
+
+  padding: 24px;
+
+  text-align: center;
+
+  background-color: white;
+
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+
+  color: #666;
+}
+
+
+
+.category-filters {
+  max-width: 1100px;
+  margin: 0 auto 28px;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.category-filters button {
+  padding: 9px 14px;
+
+  border: 1px solid #dddddd;
+  border-radius: 20px;
+
+  background-color: white;
+  color: #333;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.category-filters button:hover {
+  border-color: #222;
+}
+
+.category-filters button.active {
+  background-color: #222;
+  color: white;
+  border-color: #222;
+}
+
+
+
+/* =========================
+   FILTRO DE PRECIO
+========================= */
+
+.price-filter {
+  max-width: 1100px;
+  margin: 0 auto 28px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.price-filter label {
+  font-weight: 600;
+  color: #333;
+}
+
+.price-filter select {
+  padding: 9px 14px;
+
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+
+  background-color: white;
+  color: #333;
+
+  font-size: 14px;
+
+  cursor: pointer;
+  outline: none;
+}
+
+.price-filter select:focus {
+  border-color: #222;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
+}
+
+
+
+/* =========================
+   ORDENAMIENTO
+========================= */
+
+.sort-filter {
+  max-width: 1100px;
+  margin: 0 auto 28px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sort-filter label {
+  font-weight: 600;
+  color: #333;
+}
+
+.sort-filter select {
+  padding: 9px 14px;
+
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+
+  background-color: white;
+  color: #333;
+
+  font-size: 14px;
+
+  cursor: pointer;
+  outline: none;
+}
+
+.sort-filter select:focus {
+  border-color: #222;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
+}
+
+
+.success-message {
+  max-width: 1100px;
+  margin: 0 auto 20px;
+
+  padding: 14px 18px;
+
+  background-color: #e8f5e9;
+  color: #2e7d32;
+
+  border: 1px solid #c8e6c9;
+  border-radius: 10px;
+
+  font-weight: 600;
+}
+
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.orders-link {
+  text-decoration: none;
+
+  padding: 10px 16px;
+
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+
+  background-color: white;
+  color: #222;
+
+  font-weight: 600;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.orders-link:hover {
+  background-color: #f3f3f3;
+  border-color: #bbb;
+}
+
+

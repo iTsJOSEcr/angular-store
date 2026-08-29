@@ -1,0 +1,127 @@
+<header class="store-header">
+  <h1>Mi tienda</h1>
+
+ <div class="header-actions">
+
+  <a routerLink="/orders" class="orders-link">
+    📦 Mis pedidos
+  </a>
+
+  <a routerLink="/cart" class="cart-link">
+    🛒 Carrito: {{ getTotalItems() }}
+  </a>
+
+</div>
+</header>
+
+@if (purchaseSuccess()) {
+  <div class="success-message">
+    ✅ Compra realizada correctamente
+  </div>
+}
+
+<div class="search-container">
+
+  <div class="search-box">
+    <input
+      type="text"
+      placeholder="Buscar productos..."
+      [value]="searchTerm()"
+      (input)="searchTerm.set($any($event.target).value)">
+
+    @if (searchTerm()) {
+      <button
+        class="clear-search"
+        type="button"
+        (click)="searchTerm.set('')">
+        ✕
+      </button>
+    }
+  </div>
+
+</div>
+
+<div class="category-filters">
+
+  @for (category of categories; track category) {
+
+    <button
+      type="button"
+      (click)="selectedCategory.set(category)"
+      [class.active]="selectedCategory() === category">
+
+      {{ category }}
+
+    </button>
+
+  }
+
+</div>
+
+
+<div class="price-filter">
+
+  <label for="price">
+    Precio:
+  </label>
+
+  <select
+    id="price"
+    [value]="selectedPrice()"
+    (change)="selectedPrice.set($any($event.target).value)">
+
+    @for (price of priceRanges; track price) {
+      <option [value]="price">
+        {{ price }}
+      </option>
+    }
+
+  </select>
+
+</div>
+
+<div class="sort-filter">
+
+  <label for="sort">
+    Ordenar:
+  </label>
+
+  <select
+    id="sort"
+    [value]="selectedSort()"
+    (change)="selectedSort.set($any($event.target).value)">
+
+    @for (option of sortOptions; track option.value) {
+      <option [value]="option.value">
+        {{ option.label }}
+      </option>
+    }
+
+  </select>
+
+</div>
+
+
+@if (filteredProducts().length > 0) {
+
+  <div class="products-grid">
+
+    @for (product of filteredProducts(); track product.id) {
+
+      <app-product-card
+        [product]="product"
+        [quantityInCart]="getQuantityInCart(product)"
+        (addToCart)="handleAddToCart($event)">
+      </app-product-card>
+
+    }
+
+  </div>
+
+} @else {
+
+  <div class="no-results">
+    🔎 No se encontraron productos.
+  </div>
+
+}
