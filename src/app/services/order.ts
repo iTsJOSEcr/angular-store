@@ -25,14 +25,30 @@ export class Order {
   }
 
   getNextId(): number {
-    if (this.orders().length === 0) {
-      return 1;
-    }
-
-    return Math.max(
-      ...this.orders().map(order => order.id)
-    ) + 1;
+  if (this.orders().length === 0) {
+    return 1;
   }
+
+  return Math.max(
+    ...this.orders().map(order => order.id)
+  ) + 1;
+}
+
+getNextOrderNumber(userId: number): number {
+  const userOrders = this.orders().filter(
+    order => order.userId === userId
+  );
+
+  if (userOrders.length === 0) {
+    return 1;
+  }
+
+  return Math.max(
+    ...userOrders.map(order => order.orderNumber ?? 0)
+  ) + 1;
+}
+
+
 
   private loadOrders(): OrderModel[] {
     const savedOrders = localStorage.getItem('orders');

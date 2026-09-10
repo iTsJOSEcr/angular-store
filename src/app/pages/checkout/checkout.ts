@@ -4,7 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { Cart as CartService } from '../../services/cart';
 import { Product as ProductService } from '../../services/product';
 import { Order as OrderService } from '../../services/order';
-
+import { Auth as AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-checkout',
@@ -15,12 +15,12 @@ import { Order as OrderService } from '../../services/order';
 export class Checkout {
 
   private formBuilder = inject(FormBuilder);
+
   cartService = inject(CartService);
   productService = inject(ProductService);
   router = inject(Router);
   orderService = inject(OrderService);
-
-  
+  authService = inject(AuthService);
 
   checkoutForm = this.formBuilder.group({
     name: ['', Validators.required],
@@ -36,14 +36,24 @@ export class Checkout {
     address: ['', Validators.required]
   });
 
- submitOrder(): void {
-  if (this.checkoutForm.invalid) {
-    this.checkoutForm.markAllAsTouched();
-    return;
-  }
+  submitOrder(): void {
 
-  const order = {
+    if (this.checkoutForm.invalid) {
+      this.checkoutForm.markAllAsTouched();
+      return;
+    }
+
+    const currentUser = this.authService.currentUser();
+
+    if (!currentUser) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    const order = {
   id: this.orderService.getNextId(),
+  orderNumber: this.orderService.getNextOrderNumber(currentUser.id),
+  userId: currentUser.id,
   customerName: this.checkoutForm.value.name!,
   customerEmail: this.checkoutForm.value.email!,
   address: this.checkoutForm.value.address!,
@@ -52,27 +62,23 @@ export class Checkout {
   date: new Date().toLocaleString()
 };
 
-this.orderService.addOrder(order);
+    this.orderService.addOrder(order);
 
+    this.cartService.cart().forEach(item => {
+      this.productService.updateStock(
+        item.product.id,
+        item.quantity
+      );
+    });
 
-  this.cartService.cart().forEach(item => {
-    this.productService.updateStock(
-      item.product.id,
-      item.quantity
-    );
-  });
+    this.cartService.clearCart();
 
-this.cartService.clearCart();
-
-this.router.navigate(['/'], {
-  state: {
-    purchaseSuccess: true
+    this.router.navigate(['/'], {
+      state: {
+        purchaseSuccess: true
+      }
+    });
   }
-});
-
 }
 
-
-
-}
 

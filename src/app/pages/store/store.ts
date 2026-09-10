@@ -4,6 +4,7 @@ import { ProductCard } from '../../components/product-card/product-card';
 import { Product } from '../../models/product.model';
 import { Cart as CartService } from '../../services/cart';
 import { Product as ProductService } from '../../services/product';
+import { Auth as AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-store',
@@ -167,6 +168,17 @@ constructor() {
     }, 3000);
   }
 }
+
+
+authService = inject(AuthService);
+
+
+logout(): void {
+  this.authService.logout();
+  this.router.navigate(['/login']);
+}
+
+
 
 
 }

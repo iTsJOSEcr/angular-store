@@ -1,17 +1,34 @@
 <header class="store-header">
   <h1>Mi tienda</h1>
 
- <div class="header-actions">
+  <div class="header-right">
 
-  <a routerLink="/orders" class="orders-link">
-    📦 Mis pedidos
-  </a>
+    <div class="header-actions">
+      <a routerLink="/orders" class="orders-link">
+        📦 Mis pedidos
+      </a>
 
-  <a routerLink="/cart" class="cart-link">
-    🛒 Carrito: {{ getTotalItems() }}
-  </a>
+      <a routerLink="/cart" class="cart-link">
+        🛒 Carrito: {{ getTotalItems() }}
+      </a>
+    </div>
 
-</div>
+    @if (authService.currentUser(); as user) {
+      <div class="user-actions">
+        <span class="user-name">
+          Hola, {{ user.name }}
+        </span>
+
+        <button
+          class="logout-button"
+          type="button"
+          (click)="logout()">
+          Cerrar sesión
+        </button>
+      </div>
+    }
+
+  </div>
 </header>
 
 @if (purchaseSuccess()) {
