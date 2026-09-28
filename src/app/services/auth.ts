@@ -1,28 +1,24 @@
-import { Injectable, signal } from '@angular/core';
+import {
+  Injectable,
+  signal,
+  inject
+} from '@angular/core';
+
 import { User } from '../models/user.model';
+import { Storage as StorageService } from './storage';
+import { DEFAULT_USERS } from '../data/user.data';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Auth {
 
- private users: User[] = [
-  {
-    id: 1,
-    name: 'Jose',
-    email: 'jose@gmail.com',
-    password: '1234'
-  },
-  {
-    id: 2,
-    name: 'Maria',
-    email: 'maria@gmail.com',
-    password: '5678'
-  }
-];
+  private storageService = inject(StorageService);
+
+  private users: User[] = DEFAULT_USERS;
 
   currentUser = signal<User | null>(
-    this.loadCurrentUser()
+    this.storageService.get<User>('currentUser')
   );
 
   login(email: string, password: string): boolean {
@@ -38,9 +34,9 @@ export class Auth {
 
     this.currentUser.set(user);
 
-    localStorage.setItem(
+    this.storageService.save(
       'currentUser',
-      JSON.stringify(user)
+      user
     );
 
     return true;
@@ -48,20 +44,11 @@ export class Auth {
 
   logout(): void {
     this.currentUser.set(null);
-    localStorage.removeItem('currentUser');
+
+    this.storageService.remove('currentUser');
   }
 
   isLoggedIn(): boolean {
     return this.currentUser() !== null;
-  }
-
-  private loadCurrentUser(): User | null {
-    const savedUser = localStorage.getItem('currentUser');
-
-    if (!savedUser) {
-      return null;
-    }
-
-    return JSON.parse(savedUser);
   }
 }

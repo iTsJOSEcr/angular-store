@@ -1,31 +1,54 @@
-import { Injectable, signal, computed, effect } from '@angular/core';
+import {
+  Injectable,
+  signal,
+  computed,
+  effect,
+  inject
+} from '@angular/core';
+
 import { CartItem } from '../models/cart-item.model';
 import { Product } from '../models/product.model';
+
+import { Storage as StorageService } from './storage';
+
+import {
+  calculateTotalItems,
+  calculateCartTotal,
+  findCartItem
+} from '../utils/cart.utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Cart {
 
-  cart = signal<CartItem[]>(this.loadCart());
+  private storageService = inject(StorageService);
+
+  cart = signal<CartItem[]>(
+    this.storageService.get<CartItem[]>('cart') ?? []
+  );
 
   totalItems = computed(() =>
-    this.cart().reduce(
-      (total, item) => total + item.quantity,
-      0
-    )
+    calculateTotalItems(this.cart())
   );
 
   cartTotal = computed(() =>
-    this.cart().reduce(
-      (total, item) => total + item.product.price * item.quantity,
-      0
-    )
+    calculateCartTotal(this.cart())
   );
 
+  constructor() {
+    effect(() => {
+      this.storageService.save(
+        'cart',
+        this.cart()
+      );
+    });
+  }
+
   addProduct(product: Product): void {
-    const existingItem = this.cart().find(
-      item => item.product.id === product.id
+    const existingItem = findCartItem(
+      this.cart(),
+      product.id
     );
 
     if (existingItem) {
@@ -34,16 +57,18 @@ export class Cart {
 
         this.cart.update(items => [...items]);
       }
-    } else {
-      if (product.stock > 0) {
-        this.cart.update(items => [
-          ...items,
-          {
-            product,
-            quantity: 1
-          }
-        ]);
-      }
+
+      return;
+    }
+
+    if (product.stock > 0) {
+      this.cart.update(items => [
+        ...items,
+        {
+          product,
+          quantity: 1
+        }
+      ]);
     }
   }
 
@@ -52,8 +77,9 @@ export class Cart {
   }
 
   getQuantityInCart(product: Product): number {
-    const item = this.cart().find(
-      item => item.product.id === product.id
+    const item = findCartItem(
+      this.cart(),
+      product.id
     );
 
     return item?.quantity ?? 0;
@@ -78,7 +104,8 @@ export class Cart {
   removeProduct(item: CartItem): void {
     this.cart.update(items =>
       items.filter(
-        cartItem => cartItem.product.id !== item.product.id
+        cartItem =>
+          cartItem.product.id !== item.product.id
       )
     );
   }
@@ -92,31 +119,9 @@ export class Cart {
   }
 
   getAvailableStock(product: Product): number {
-  const quantityInCart = this.getQuantityInCart(product);
+    const quantityInCart =
+      this.getQuantityInCart(product);
 
-  return product.stock - quantityInCart;
-}
-
-
-constructor() {
-  effect(() => {
-    localStorage.setItem(
-      'cart',
-      JSON.stringify(this.cart())
-    );
-  });
-}
-
-
-private loadCart(): CartItem[] {
-  const savedCart = localStorage.getItem('cart');
-
-  if (!savedCart) {
-    return [];
+    return product.stock - quantityInCart;
   }
-
-  return JSON.parse(savedCart);
-}
-
-
 }
