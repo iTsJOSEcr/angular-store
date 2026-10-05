@@ -1,18 +1,34 @@
-import { Injectable, signal, effect } from '@angular/core';
+import {
+  Injectable,
+  signal,
+  effect,
+  inject
+} from '@angular/core';
+
 import { Order as OrderModel } from '../models/order.model';
+import { Storage as StorageService } from './storage';
+
+import {
+  calculateNextId,
+  calculateNextOrderNumber
+} from '../utils/order.utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Order {
 
-  orders = signal<OrderModel[]>(this.loadOrders());
+  private storageService = inject(StorageService);
+
+  orders = signal<OrderModel[]>(
+    this.storageService.get<OrderModel[]>('orders') ?? []
+  );
 
   constructor() {
     effect(() => {
-      localStorage.setItem(
+      this.storageService.save(
         'orders',
-        JSON.stringify(this.orders())
+        this.orders()
       );
     });
   }
@@ -25,22 +41,15 @@ export class Order {
   }
 
   getNextId(): number {
-    if (this.orders().length === 0) {
-      return 1;
-    }
-
-    return Math.max(
-      ...this.orders().map(order => order.id)
-    ) + 1;
+    return calculateNextId(
+      this.orders()
+    );
   }
 
-  private loadOrders(): OrderModel[] {
-    const savedOrders = localStorage.getItem('orders');
-
-    if (!savedOrders) {
-      return [];
-    }
-
-    return JSON.parse(savedOrders);
+  getNextOrderNumber(userId: number): number {
+    return calculateNextOrderNumber(
+      this.orders(),
+      userId
+    );
   }
 }
