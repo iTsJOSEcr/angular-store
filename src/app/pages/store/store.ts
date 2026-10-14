@@ -8,7 +8,7 @@ import { Cart as CartService } from '../../services/cart';
 import { Product as ProductService } from '../../services/product';
 import { Auth as AuthService } from '../../services/auth';
 
-import { filterAndSortProducts } from '../../utils/product.utils';
+import { ProductUtils } from '../../utils/product.utils';
 
 import {
   PRODUCT_CATEGORIES,
@@ -45,11 +45,15 @@ export class Store {
   sortOptions = SORT_OPTIONS;
 
   filteredProducts = computed(() => {
-    return filterAndSortProducts(
+    const products = ProductUtils.filterProducts(
       this.products,
       this.searchTerm(),
       this.selectedCategory(),
-      this.selectedPrice(),
+      this.selectedPrice()
+    );
+
+    return ProductUtils.sortProducts(
+      products,
       this.selectedSort()
     );
   });
@@ -79,3 +83,5 @@ export class Store {
     this.router.navigate(['/login']);
   }
 }
+
+

@@ -10,12 +10,7 @@ import { CartItem } from '../models/cart-item.model';
 import { Product } from '../models/product.model';
 
 import { Storage as StorageService } from './storage';
-
-import {
-  calculateTotalItems,
-  calculateCartTotal,
-  findCartItem
-} from '../utils/cart.utils';
+import { CartUtils } from '../utils/cart.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -29,11 +24,11 @@ export class Cart {
   );
 
   totalItems = computed(() =>
-    calculateTotalItems(this.cart())
+    CartUtils.calculateTotalItems(this.cart())
   );
 
   cartTotal = computed(() =>
-    calculateCartTotal(this.cart())
+    CartUtils.calculateCartTotal(this.cart())
   );
 
   constructor() {
@@ -46,7 +41,7 @@ export class Cart {
   }
 
   addProduct(product: Product): void {
-    const existingItem = findCartItem(
+    const existingItem = CartUtils.findCartItem(
       this.cart(),
       product.id
     );
@@ -77,7 +72,7 @@ export class Cart {
   }
 
   getQuantityInCart(product: Product): number {
-    const item = findCartItem(
+    const item = CartUtils.findCartItem(
       this.cart(),
       product.id
     );
