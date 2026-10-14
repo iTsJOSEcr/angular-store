@@ -7,11 +7,7 @@ import {
 
 import { Order as OrderModel } from '../models/order.model';
 import { Storage as StorageService } from './storage';
-
-import {
-  calculateNextId,
-  calculateNextOrderNumber
-} from '../utils/order.utils';
+import { OrderUtils } from '../utils/order.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -41,13 +37,13 @@ export class Order {
   }
 
   getNextId(): number {
-    return calculateNextId(
+    return OrderUtils.calculateNextId(
       this.orders()
     );
   }
 
   getNextOrderNumber(userId: number): number {
-    return calculateNextOrderNumber(
+    return OrderUtils.calculateNextOrderNumber(
       this.orders(),
       userId
     );
