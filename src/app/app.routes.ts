@@ -1,10 +1,14 @@
+
 import { Routes } from '@angular/router';
+
 import { Store } from './pages/store/store';
 import { Cart } from './components/cart/cart';
 import { ProductDetail } from './pages/product-detail/product-detail';
 import { Checkout } from './pages/checkout/checkout';
 import { Orders } from './pages/orders/orders';
 import { Login } from './pages/login/login';
+import { Favorites } from './pages/favorites/favorites';
+
 import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
@@ -43,5 +47,16 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
 
-  { path: '**', redirectTo: '' }
+  {
+    path: 'favorites',
+    component: Favorites,
+    canActivate: [authGuard]
+  },
+
+  {
+    path: '**',
+    redirectTo: ''
+  }
 ];
+
+

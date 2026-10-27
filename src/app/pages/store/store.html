@@ -1,9 +1,15 @@
+
 <header class="store-header">
   <h1>Mi tienda</h1>
 
   <div class="header-right">
 
     <div class="header-actions">
+
+      <a routerLink="/favorites" class="favorites-link">
+        ❤️ Mis favoritos
+      </a>
+
       <a routerLink="/orders" class="orders-link">
         📦 Mis pedidos
       </a>
@@ -11,6 +17,7 @@
       <a routerLink="/cart" class="cart-link">
         🛒 Carrito: {{ getTotalItems() }}
       </a>
+
     </div>
 
     @if (authService.currentUser(); as user) {
@@ -30,6 +37,7 @@
 
   </div>
 </header>
+
 
 @if (purchaseSuccess()) {
   <div class="success-message">
@@ -125,11 +133,14 @@
 
     @for (product of filteredProducts(); track product.id) {
 
-      <app-product-card
-        [product]="product"
-        [quantityInCart]="getQuantityInCart(product)"
-        (addToCart)="handleAddToCart($event)">
-      </app-product-card>
+      
+<app-product-card
+  [product]="product"
+  [quantityInCart]="getQuantityInCart(product)"
+  [isFavorite]="isFavorite(product.id)"
+  (addToCart)="handleAddToCart($event)"
+  (toggleFavorite)="handleToggleFavorite($event)">
+</app-product-card>
 
     }
 
