@@ -1,27 +1,62 @@
+
 <div class="product-card">
-    <img [src]="product().imageUrl" [alt]="product().name">
 
-   <h2>
-  <a [routerLink]="['/product', product().id]">
-    {{ product().name }}
-  </a>
-</h2>
-    <p>{{ product().description }}</p>
-    <p class="price">₡{{ product().price | number }}</p>
-   <p>
-  Stock disponible:
-  {{ product().stock - quantityInCart() }}
-</p>
-
+  <!-- Botón de favoritos -->
   <button
-  (click)="addToCart.emit(product())"
-  [disabled]="quantityInCart() >= product().stock">
+  type="button"
+  class="favorite-button"
+  (click)="toggleFavorite.emit(product().id)"
+  [attr.aria-pressed]="isFavorite()"
+  [attr.aria-label]="isFavorite() ? 'Quitar de favoritos' : 'Agregar a favoritos'">
 
-  @if (quantityInCart() >= product().stock) {
-    Stock máximo alcanzado
+  @if (isFavorite()) {
+    ❤️
   } @else {
-    Agregar al carrito
+    ♡
   }
 
 </button>
+
+  <!-- Imagen del producto -->
+  <img
+    [src]="product().imageUrl"
+    [alt]="product().name">
+
+  <!-- Nombre del producto -->
+  <h2>
+    <a [routerLink]="['/product', product().id]">
+      {{ product().name }}
+    </a>
+  </h2>
+
+  <!-- Descripción -->
+  <p>{{ product().description }}</p>
+
+  <!-- Precio -->
+  <p class="price">
+    ₡{{ product().price | number }}
+  </p>
+
+  <!-- Stock disponible -->
+  <p>
+    Stock disponible:
+    {{ product().stock - quantityInCart() }}
+  </p>
+
+  <!-- Botón para agregar al carrito -->
+  <button
+    type="button"
+    (click)="addToCart.emit(product())"
+    [disabled]="quantityInCart() >= product().stock">
+
+    @if (quantityInCart() >= product().stock) {
+      Stock máximo alcanzado
+    } @else {
+      Agregar al carrito
+    }
+
+  </button>
+
 </div>
+
+

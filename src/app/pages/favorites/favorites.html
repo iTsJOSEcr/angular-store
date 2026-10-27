@@ -1,0 +1,39 @@
+
+<section class="favorites-page">
+
+  <h1>Mis favoritos ❤️</h1>
+
+  <p>Estos son los productos que guardaste como favoritos.</p>
+
+  <a routerLink="/">Volver a la tienda</a>
+
+  @if (favoriteProducts().length === 0) {
+
+    <div class="empty-favorites">
+      <h2>Todavía no tenés productos favoritos</h2>
+      <p>Explorá nuestra tienda y guardá los productos que más te gusten.</p>
+      <a routerLink="/">Explorar productos</a>
+    </div>
+
+  } @else {
+
+    <div class="products-grid">
+
+      @for (product of favoriteProducts(); track product.id) {
+
+        <app-product-card
+          [product]="product"
+          [quantityInCart]="getQuantityInCart(product)"
+          [isFavorite]="true"
+          (addToCart)="handleAddToCart($event)"
+          (toggleFavorite)="handleRemoveFavorite($event)">
+        </app-product-card>
+
+      }
+
+    </div>
+
+  }
+
+</section>
+

@@ -1,3 +1,4 @@
+
 import { Component, inject, signal, computed } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 
@@ -7,8 +8,10 @@ import { Product } from '../../models/product.model';
 import { Cart as CartService } from '../../services/cart';
 import { Product as ProductService } from '../../services/product';
 import { Auth as AuthService } from '../../services/auth';
+import { Favorite as FavoriteService } from '../../services/favorite';
 
 import { ProductUtils } from '../../utils/product.utils';
+import { FavoriteUtils } from '../../utils/favorite.utils';
 
 import {
   PRODUCT_CATEGORIES,
@@ -27,6 +30,7 @@ export class Store {
   cartService = inject(CartService);
   productService = inject(ProductService);
   authService = inject(AuthService);
+  favoriteService = inject(FavoriteService);
   router = inject(Router);
 
   products = this.productService.getProducts();
@@ -68,6 +72,26 @@ export class Store {
 
   handleAddToCart(product: Product): void {
     this.cartService.addProduct(product);
+  }
+
+  isFavorite(productId: number): boolean {
+    return FavoriteUtils.isFavorite(
+      this.favoriteService.favoriteIds(),
+      productId
+    );
+  }
+
+  handleToggleFavorite(productId: number): void {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    if (this.isFavorite(productId)) {
+      this.favoriteService.removeFavorite(productId);
+    } else {
+      this.favoriteService.addFavorite(productId);
+    }
   }
 
   getTotalItems(): number {
