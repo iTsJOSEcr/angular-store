@@ -33,7 +33,6 @@ export class Store {
   favoriteService = inject(FavoriteService);
   router = inject(Router);
 
-  products = this.productService.getProducts();
 
   searchTerm = signal('');
   selectedCategory = signal('Todos');
@@ -49,18 +48,22 @@ export class Store {
   sortOptions = SORT_OPTIONS;
 
   filteredProducts = computed(() => {
-    const products = ProductUtils.filterProducts(
-      this.products,
-      this.searchTerm(),
-      this.selectedCategory(),
-      this.selectedPrice()
-    );
+  const activeProducts = this.productService.products().filter(
+    product => product.active
+  );
 
-    return ProductUtils.sortProducts(
-      products,
-      this.selectedSort()
-    );
-  });
+  const filteredProducts = ProductUtils.filterProducts(
+    activeProducts,
+    this.searchTerm(),
+    this.selectedCategory(),
+    this.selectedPrice()
+  );
+
+  return ProductUtils.sortProducts(
+    filteredProducts,
+    this.selectedSort()
+  );
+});
 
   constructor() {
     if (this.purchaseSuccess()) {

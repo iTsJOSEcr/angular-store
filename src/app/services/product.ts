@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 
 import { Product as ProductModel } from '../models/product.model';
 import { Storage as StorageService } from './storage';
@@ -9,37 +9,50 @@ import { DEFAULT_PRODUCTS } from '../data/product.data';
 })
 export class Product {
 
-  private storageService = inject(StorageService);
+  private readonly storageService = inject(StorageService);
 
-  products: ProductModel[] =
+  private readonly productsState = signal<ProductModel[]>(
     this.storageService.get<ProductModel[]>('products')
-    ?? DEFAULT_PRODUCTS;
+      ?? DEFAULT_PRODUCTS.map(product => ({ ...product }))
+  );
+
+  readonly products = this.productsState.asReadonly();
 
   getProducts(): ProductModel[] {
-    return this.products;
+    return this.productsState();
   }
 
   getProductById(id: number): ProductModel | undefined {
-    return this.products.find(
+    return this.productsState().find(
       product => product.id === id
     );
   }
 
-  updateStock(
-    productId: number,
-    quantity: number
-  ): void {
-    const product = this.getProductById(productId);
-
-    if (!product) {
+  updateStock(productId: number, quantity: number): void {
+    if (!Number.isInteger(quantity) || quantity <= 0) {
       return;
     }
 
-    product.stock -= quantity;
+    const product = this.getProductById(productId);
+
+    if (!product || product.stock < quantity) {
+      return;
+    }
+
+    this.productsState.update(products =>
+      products.map(currentProduct =>
+        currentProduct.id === productId
+          ? {
+              ...currentProduct,
+              stock: currentProduct.stock - quantity
+            }
+          : currentProduct
+      )
+    );
 
     this.storageService.save(
       'products',
-      this.products
+      this.productsState()
     );
   }
 }
