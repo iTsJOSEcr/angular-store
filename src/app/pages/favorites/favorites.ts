@@ -1,6 +1,5 @@
 
 import { Component, inject, computed } from '@angular/core';
-
 import { RouterLink } from '@angular/router';
 
 import { ProductCard } from '../../components/product-card/product-card';
@@ -20,16 +19,16 @@ import { FavoriteUtils } from '../../utils/favorite.utils';
 })
 export class Favorites {
 
-  productService = inject(ProductService);
-  favoriteService = inject(FavoriteService);
-  cartService = inject(CartService);
+  private readonly productService = inject(ProductService);
+  private readonly favoriteService = inject(FavoriteService);
+  private readonly cartService = inject(CartService);
 
-  products = this.productService.getProducts();
-
-  favoriteProducts = computed(() => {
+  readonly favoriteProducts = computed(() => {
     const favoriteIds = this.favoriteService.favoriteIds();
+    const products = this.productService.products();
 
-    return this.products.filter(product =>
+    return products.filter(product =>
+      product.active &&
       FavoriteUtils.isFavorite(favoriteIds, product.id)
     );
   });
@@ -39,6 +38,10 @@ export class Favorites {
   }
 
   handleAddToCart(product: Product): void {
+    if (!product.active) {
+      return;
+    }
+
     this.cartService.addProduct(product);
   }
 
