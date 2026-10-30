@@ -1,3 +1,4 @@
+
 import { CartItem } from '../models/cart-item.model';
 
 export class CartUtils {
@@ -27,6 +28,27 @@ export class CartUtils {
   ): CartItem | undefined {
     return items.find(
       item => item.product.id === productId
+    );
+  }
+
+  static updateQuantity(
+    items: CartItem[],
+    productId: number,
+    quantity: number
+  ): CartItem[] {
+    return items.map(item =>
+      item.product.id === productId
+        ? { ...item, quantity }
+        : item
+    );
+  }
+
+  static removeCartItem(
+    items: CartItem[],
+    productId: number
+  ): CartItem[] {
+    return items.filter(
+      item => item.product.id !== productId
     );
   }
 }
