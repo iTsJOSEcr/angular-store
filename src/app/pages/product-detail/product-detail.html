@@ -1,41 +1,50 @@
+
 <button
   class="back-link"
   (click)="goBack()">
   ← Volver a la tienda
 </button>
 
-@if (product) {
+@if (product(); as currentProduct) {
 
   <div class="product-detail">
 
     <div class="product-image">
       <img
-        [src]="product.imageUrl"
-        [alt]="product.name">
+        [src]="currentProduct.imageUrl"
+        [alt]="currentProduct.name">
     </div>
 
     <div class="product-info">
-      <h1>{{ product.name }}</h1>
+      <h1>{{ currentProduct.name }}</h1>
 
-      <p>{{ product.description }}</p>
+      <p>{{ currentProduct.description }}</p>
 
-      <h2>₡{{ product.price | number }}</h2>
+      <h2>₡{{ currentProduct.price | number }}</h2>
 
-      <p>
-        Stock disponible: {{ getAvailableStock() }}
-      </p>
+      @if (currentProduct.active) {
 
-      <button
-        (click)="addToCart()"
-        [disabled]="getAvailableStock() === 0">
+        <p>
+          Stock disponible: {{ getAvailableStock() }}
+        </p>
 
-        @if (getAvailableStock() === 0) {
-          Stock máximo alcanzado
-        } @else {
-          Agregar al carrito
-        }
+        <button
+          (click)="addToCart()"
+          [disabled]="getAvailableStock() === 0">
 
-      </button>
+          @if (getAvailableStock() === 0) {
+            Stock máximo alcanzado
+          } @else {
+            Agregar al carrito
+          }
+
+        </button>
+
+      } @else {
+
+        <p>Este producto ya no está disponible.</p>
+
+      }
 
     </div>
 
@@ -46,3 +55,4 @@
   <p>Producto no encontrado.</p>
 
 }
+

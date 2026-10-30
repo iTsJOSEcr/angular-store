@@ -1,7 +1,9 @@
-import { Component, inject } from '@angular/core';
+
+import { Component, inject, computed } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DecimalPipe, Location } from '@angular/common';
-import { Product } from '../../models/product.model';
+import { toSignal } from '@angular/core/rxjs-interop';
+
 import { Cart as CartService } from '../../services/cart';
 import { Product as ProductService } from '../../services/product';
 
@@ -13,43 +15,60 @@ import { Product as ProductService } from '../../services/product';
 })
 export class ProductDetail {
 
-  route = inject(ActivatedRoute);
-  location = inject(Location);
+  private readonly route = inject(ActivatedRoute);
+  private readonly location = inject(Location);
 
-  cartService = inject(CartService);
-  productService = inject(ProductService);
+  private readonly cartService = inject(CartService);
+  private readonly productService = inject(ProductService);
 
-  product?: Product;
+  private readonly paramMap = toSignal(
+    this.route.paramMap,
+    { initialValue: this.route.snapshot.paramMap }
+  );
 
-  constructor() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+  readonly product = computed(() => {
+    const id = Number(this.paramMap()?.get('id'));
 
-    this.product = this.productService.getProductById(id);
-  }
+    if (!Number.isInteger(id) || id <= 0) {
+      return undefined;
+    }
+
+    return this.productService.products().find(
+      product => product.id === id
+    );
+  });
 
   addToCart(): void {
-    if (this.product) {
-      this.cartService.addProduct(this.product);
+    const product = this.product();
+
+    if (product && product.active) {
+      this.cartService.addProduct(product);
     }
   }
 
   getQuantityInCart(): number {
-    if (!this.product) {
+    const product = this.product();
+
+    if (!product) {
       return 0;
     }
 
-    return this.cartService.getQuantityInCart(this.product);
+    return this.cartService.getQuantityInCart(product);
   }
 
   getAvailableStock(): number {
-    if (!this.product) {
+    const product = this.product();
+
+    if (!product || !product.active) {
       return 0;
     }
 
-    return this.cartService.getAvailableStock(this.product);
+    return this.cartService.getAvailableStock(product);
   }
 
   goBack(): void {
     this.location.back();
   }
 }
+
+
