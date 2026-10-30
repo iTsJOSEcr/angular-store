@@ -71,20 +71,29 @@ export class Checkout {
     return true;
   }
 
-  private createOrder(currentUser: User): Order {
-    return {
-      id: this.orderService.getNextId(),
-      orderNumber:
-        this.orderService.getNextOrderNumber(currentUser.id),
-      userId: currentUser.id,
-      customerName: this.checkoutForm.value.name!,
-      customerEmail: this.checkoutForm.value.email!,
-      address: this.checkoutForm.value.address!,
-      items: [...this.cartService.cart()],
-      total: this.cartService.cartTotal(),
-      date: new Date().toLocaleString()
-    };
-  }
+  
+private createOrder(currentUser: User): Order {
+  const orderItems = this.cartService.cart().map(item => ({
+    productId: item.product.id,
+    productName: item.product.name,
+    unitPrice: item.product.price,
+    quantity: item.quantity
+  }));
+
+  return {
+    id: this.orderService.getNextId(),
+    orderNumber:
+      this.orderService.getNextOrderNumber(currentUser.id),
+    userId: currentUser.id,
+    customerName: this.checkoutForm.value.name!,
+    customerEmail: this.checkoutForm.value.email!,
+    address: this.checkoutForm.value.address!,
+    items: orderItems,
+    total: this.cartService.cartTotal(),
+    date: new Date().toLocaleString()
+  };
+}
+
 
   private processOrder(order: Order): void {
     this.orderService.addOrder(order);

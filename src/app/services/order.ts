@@ -1,3 +1,4 @@
+
 import {
   Injectable,
   signal,
@@ -7,18 +8,26 @@ import {
 
 import { Order as OrderModel } from '../models/order.model';
 import { Storage as StorageService } from './storage';
+
 import { OrderUtils } from '../utils/order.utils';
+import { OrderMigrationUtils } from '../utils/order-migration.utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Order {
 
-  private storageService = inject(StorageService);
+  private readonly storageService = inject(StorageService);
 
-  orders = signal<OrderModel[]>(
-    this.storageService.get<OrderModel[]>('orders') ?? []
+  private readonly ordersState = signal<OrderModel[]>(
+    OrderMigrationUtils.migrateOrders(
+      this.storageService.get<
+        Parameters<typeof OrderMigrationUtils.migrateOrders>[0]
+      >('orders') ?? []
+    )
   );
+
+  readonly orders = this.ordersState.asReadonly();
 
   constructor() {
     effect(() => {
@@ -30,7 +39,7 @@ export class Order {
   }
 
   addOrder(order: OrderModel): void {
-    this.orders.update(orders => [
+    this.ordersState.update(orders => [
       ...orders,
       order
     ]);
@@ -49,3 +58,4 @@ export class Order {
     );
   }
 }
+

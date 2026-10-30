@@ -1,4 +1,5 @@
-import { CartItem } from './cart-item.model';
+
+import { OrderItem } from './order-item.model';
 
 export interface Order {
   id: number;
@@ -7,7 +8,7 @@ export interface Order {
   customerName: string;
   customerEmail: string;
   address: string;
-  items: CartItem[];
+  items: OrderItem[];
   total: number;
   date: string;
 }

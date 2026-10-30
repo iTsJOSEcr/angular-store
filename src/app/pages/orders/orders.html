@@ -42,23 +42,25 @@
             </p>
           </div>
 
-          <div class="order-items">
+     
+<div class="order-items">
 
-            @for (item of order.items; track item.product.id) {
+  @for (item of order.items; track item.productId) {
 
-              <div class="order-item">
-                <span>
-                  {{ item.product.name }} x{{ item.quantity }}
-                </span>
+    <div class="order-item">
+      <span>
+        {{ item.productName }} x{{ item.quantity }}
+      </span>
 
-                <span>
-                  ₡{{ item.product.price * item.quantity | number }}
-                </span>
-              </div>
+      <span>
+        ₡{{ item.unitPrice * item.quantity | number }}
+      </span>
+    </div>
 
-            }
+  }
 
-          </div>
+</div>
+
 
         </div>
 
